@@ -21,14 +21,14 @@ def refresh():
     # Reset var and delete all old options
     var.set('')
     new_choices = [] 
-    network_select['menu'].delete(0, 'end')
+    serial_selected['menu'].delete(0, 'end')
     ports = list(serial.tools.list_ports.comports())
 
     # Insert list of new options (tk._setit hooks them up to var)
     for p in ports:
         new_choices.append (p.device)
     for choice in new_choices:
-        network_select['menu'].add_command(label=choice, command=tk._setit(var, choice))
+        serial_selected['menu'].add_command(label=choice, command=tk._setit(var, choice))
     var.set(new_choices[0] )
 
 def connect():
@@ -42,8 +42,8 @@ def connect():
         LabelStatus.config(text="not connected")
     return (0)
 
-network_select = tk.OptionMenu(root, var, *choices)
-network_select.grid(row=0, column=0)
+serial_selected = tk.OptionMenu(root, var, *choices)
+serial_selected.grid(row=0, column=0)
 
 # I made this quick refresh button to demonstrate
 BtRefresh = tk.Button(root, text='Refresh', command=refresh)
