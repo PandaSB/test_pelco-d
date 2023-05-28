@@ -1,2 +1,2 @@
-# test_perco-d
-test perco-d protocol (RS485 camera Pan &amp; Tilt
+# test_pelco-d
+test pelco-d protocol (RS485 camera Pan &amp; Tilt
