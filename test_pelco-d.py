@@ -14,7 +14,7 @@ var = tk.StringVar(root)
 ports = list(serial.tools.list_ports.comports())
 
 LabelStatus = tk.Label(root,text="init")
-LabelStatus.grid(row=3, column=0)
+LabelStatus.grid(row=5, column=0,  columnspan=6)
 
 
 def refresh():
@@ -45,46 +45,94 @@ def connect():
 serial_selected = tk.OptionMenu(root, var, *choices)
 serial_selected.grid(row=0, column=0)
 
+tk.Label(root,text="Id :").grid(row=1,column=0)
+Id = tk.Entry(root)
+Id.grid(row=1,column=1)
+Id.insert(0,"1");
+
 # I made this quick refresh button to demonstrate
 BtRefresh = tk.Button(root, text='Refresh', command=refresh)
 BtRefresh.grid(row=0, column=1)
 BtConnect = tk.Button(root, text='Connect', command=connect)
 BtConnect.grid(row=0, column=2)
 
+def checksum(data):
+	checksum = 0 ; 
+	for p in range (1,6):
+		checksum += data[p]
+	checksum &= 255
+	return (checksum)
+
 def cmdleft():
-    command = b'\xFF\x01\x00\x04\x3F\x00\x44'
+    command = bytearray(b'\xFF\x01\x00\x04\x3F\x00\x44')
+    command[1]= int(Id.get())
+    if (len(command) <= 6):
+	    command.extend (b'\x00') 
+    command[6] = checksum (command)
     ser.write(command)
     LabelStatus.config(text = "send left")
 def cmdright():
-    command = b'\xFF\x01\x00\x02\x3F\x00\x42'
+    command = bytearray(b'\xFF\x01\x00\x02\x3F\x00\x42')
+    command[1]= int(Id.get())
+    if (len(command) <= 6):
+	    command.extend (b'\x00') 
+    command[6] = checksum (command)
     ser.write(command)
     LabelStatus.config(text = "send right")
 def cmdup():
-    command = b'\xFF\x01\x00\x08\x00\x3F\x48'
+    command = bytearray(b'\xFF\x01\x00\x08\x00\x3F\x48')
+    command[1]= int(Id.get())
+    if (len(command) <= 6):
+	    command.extend (b'\x00') 
+    command[6] = checksum (command)
     ser.write(command)
     LabelStatus.config(text = "send uo")
 def cmddown():
-    command = b'\xFF\x01\x00\x10\x00\x3F\x50'
+    command = bytearray(b'\xFF\x01\x00\x10\x00\x3F\x50')
+    command[1]= int(Id.get())
+    if (len(command) <= 6):
+	    command.extend (b'\x00') 
+    command[6] = checksum (command)
     ser.write(command)
     LabelStatus.config(text = "send down")
 def cmdupleft():
-    command = b'\xFF\x01\x00\x0c\x3F\x3F\x8b'
+    command = bytearray(b'\xFF\x01\x00\x0c\x3F\x3F\x8b')
+    command[1]= int(Id.get())
+    if (len(command) <= 6):
+	    command.extend (b'\x00') 
+    command[6] = checksum (command)
     ser.write(command)
     LabelStatus.config(text = "send cmd up left")
 def cmdupright():
-    command = b'\xFF\x01\x00\x0a\x3F\x3F\x89'
+    command = bytearray(b'\xFF\x01\x00\x0a\x3F\x3F\x89')
+    command[1]= int(Id.get())
+    if (len(command) <= 6):
+	    command.extend (b'\x00') 
+    command[6] = checksum (command)
     ser.write(command)
     LabelStatus.config(text = "send cmd up right")
 def cmddownleft():
-    command = b'\xFF\x01\x00\x14\x3F\x3F\x93'
+    command = bytearray(b'\xFF\x01\x00\x14\x3F\x3F\x93')
+    command[1]= int(Id.get())
+    if (len(command) <= 6):
+	    command.extend (b'\x00') 
+    command[6] = checksum (command)
     ser.write(command)
     LabelStatus.config(text = "send cmd up right")
 def cmddownright():
-    command = b'\xFF\x01\x00\x12\x3F\x3F\x91a'
+    command = bytearray(b'\xFF\x01\x00\x12\x3F\x3F\x91a')
+    command[1]= int(Id.get())
+    if (len(command) <= 6):
+	    command.extend (b'\x00') 
+    command[6] = checksum (command)
     ser.write(command)
     LabelStatus.config(text = "send cmd up right")
 def cmdstop():
-    command = b'\xFF\x01\x00\x00\x00\x00\x01'
+    command = bytearray(b'\xFF\x01\x00\x00\x00\x00\x01')
+    command[1]= int(Id.get())
+    if (len(command) <= 6):
+	    command.extend (b'\x00') 
+    command[6] = checksum (command)
     ser.write(command)
     LabelStatus.config(text = "send cmd stop")
 
